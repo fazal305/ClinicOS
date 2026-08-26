@@ -13,9 +13,9 @@ doctors, receptionists, and patients.
 
 ## Status
 
-**Phases 1–6 are implemented end-to-end**: foundation/auth, patients, appointments, the doctor
-clinical workflow, admin/analytics, and a responsive/accessibility polish pass. Phase 7
-(deployment) is what's left — see [Roadmap](#roadmap).
+**All 7 phases are complete.** Foundation/auth, patients, appointments, the doctor clinical
+workflow, admin/analytics, a responsive/accessibility polish pass, and deployment. The app is live
+— see [Deployment](#deployment) for the demo link, or [Roadmap](#roadmap) for the phase history.
 
 ## Features
 
@@ -206,10 +206,44 @@ node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"
 - [x] Phase 4 — Doctor workflow: medical records, prescriptions, follow-ups
 - [x] Phase 5 — Administration: staff/department management, payments, analytics
 - [x] Phase 6 — Polish: responsive/accessibility pass, skeleton loading states, audit log UI
-- [ ] Phase 7 — Deployment (pending explicit approval — see below)
+- [x] Phase 7 — Deployment
 
 ## Deployment
 
-Not yet deployed. Planned target: Vercel/Netlify (frontend), Render/Railway (API), a managed MySQL
-provider (database). Deployment — and the GitHub push, which is a separate, explicitly-confirmed
-step from deployment itself — will only happen with direct approval and provided credentials.
+**Live demo:** [clinicos-beryl.vercel.app](https://clinicos-beryl.vercel.app) — see
+[Demo Credentials](#demo-credentials) above to sign in. This is a portfolio deployment on free-tier
+hosting; treat it as a demo, not a production SLA.
+
+| Layer | Provider | Notes |
+|---|---|---|
+| Frontend | Vercel | Static Vite build; SPA routing handled via `client/vercel.json` rewrites |
+| API | Railway | Node/Express, deployed from `server/`; connects to MySQL over Railway's private network |
+| Database | Railway MySQL | Not publicly reachable — only the API service can reach it (private network) |
+
+Repository: [github.com/fazal305/ClinicOS](https://github.com/fazal305/ClinicOS) (public).
+
+### Redeploying
+
+```bash
+# Backend (from server/)
+railway up --service clinicos-server
+
+# Frontend (from client/)
+vercel deploy --prod
+```
+
+Both platforms' CLIs are linked to this project already (`railway link`, `vercel link`). Database
+migrations against the production database: run `npm run db:migrate` / `npm run db:seed` from the
+repo root with `DB_HOST`/`DB_PORT`/`DB_USER`/`DB_PASSWORD`/`DB_NAME` set to the production values —
+note the database has no public port open, so this requires either a temporary
+`railway tcp-proxy create --service MySQL --port 3306` (delete it again afterward) or running the
+command from within Railway's network (e.g. `railway ssh` / a one-off Railway job).
+
+### A cross-site auth detail worth knowing
+
+The frontend (`vercel.app`) and API (`railway.app`) are different sites, so the httpOnly refresh
+cookie is set with `SameSite=None; Secure` in production — `SameSite=Lax` (the local-dev default,
+where both run on `localhost`) is not sent on cross-origin `fetch`/XHR calls, only top-level
+navigations. This is handled automatically based on `NODE_ENV` in
+[authController.js](server/src/controllers/authController.js) — nothing to configure per environment
+beyond setting `NODE_ENV=production`.
