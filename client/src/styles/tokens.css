@@ -1,0 +1,54 @@
+/* ClinicOS design tokens — the single source of truth for color, spacing,
+   radius, shadow, and typography. Components should reference Tailwind
+   utilities built on these variables, never hard-coded hex values. */
+
+:root {
+  /* Light theme (default) */
+  --color-background: #f7f8fa;
+  --color-surface: #ffffff;
+  --color-surface-hover: #f1f4f8;
+  --color-primary: #1d6fb8;
+  --color-primary-hover: #185f9e;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #4b5d70;
+  --color-success: #1f8a5f;
+  --color-warning: #b8790d;
+  --color-danger: #c23a3a;
+  --color-text: #1a2530;
+  --color-muted: #667384;
+  --color-border: #e0e4e9;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+
+  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.06);
+  --shadow-md: 0 4px 12px rgba(16, 24, 40, 0.08);
+
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --transition-fast: 150ms;
+}
+
+:root[data-theme='dark'] {
+  --color-background: #10161d;
+  --color-surface: #171f28;
+  --color-surface-hover: #1e2733;
+  --color-primary: #4c9be0;
+  --color-primary-hover: #6bacE6;
+  --color-primary-foreground: #0b1117;
+  --color-secondary: #9aa9ba;
+  --color-success: #3fb488;
+  --color-warning: #d99a34;
+  --color-danger: #e2695f;
+  --color-text: #e7ecf1;
+  --color-muted: #8c9aab;
+  --color-border: #2a3542;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.45);
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text);
+}

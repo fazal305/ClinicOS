@@ -1,0 +1,21 @@
+{
+  "name": "clinicos",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "ClinicOS - clinic management system (portfolio project, fictional demo data only)",
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev:client": "npm run dev --workspace client",
+    "dev:server": "npm run dev --workspace server",
+    "db:migrate": "npm run migrate --workspace server",
+    "db:seed": "npm run seed --workspace server",
+    "lint": "npm run lint --workspace client && npm run lint --workspace server"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
