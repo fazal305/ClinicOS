@@ -1,18 +1,39 @@
 import axios from 'axios';
 import { useAuthStore } from '../store/authStore.js';
+import { useNetworkStatusStore } from '../store/networkStatusStore.js';
 
 export const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:4000/api',
   withCredentials: true, // send the httpOnly refresh cookie
 });
 
+// Requests still pending after this long flip on the "still working..."
+// indicator (see components/SlowNetworkIndicator.jsx) without affecting the
+// request itself — purely a UI signal, not a timeout/abort.
+const SLOW_REQUEST_MS = 5000;
+
 apiClient.interceptors.request.use((config) => {
   const token = useAuthStore.getState().accessToken;
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
+
+  config._slowTimer = setTimeout(() => {
+    config._slowTimerFired = true;
+    useNetworkStatusStore.getState().markSlow();
+  }, SLOW_REQUEST_MS);
+
   return config;
 });
+
+function clearSlowTimer(config) {
+  if (!config) return;
+  clearTimeout(config._slowTimer);
+  if (config._slowTimerFired) {
+    useNetworkStatusStore.getState().clearSlow();
+    config._slowTimerFired = false;
+  }
+}
 
 // The refresh endpoint rotates the token on every call (old one is revoked),
 // so two concurrent refresh calls — e.g. React StrictMode double-invoking an
@@ -29,9 +50,13 @@ export function refreshSession() {
 }
 
 apiClient.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    clearSlowTimer(response.config);
+    return response;
+  },
   async (error) => {
     const original = error.config;
+    clearSlowTimer(original);
     const status = error.response?.status;
     const isAuthEndpoint = original?.url?.includes('/auth/login') || original?.url?.includes('/auth/refresh');
 
