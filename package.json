@@ -2,6 +2,7 @@
   "name": "clinicos",
   "private": true,
   "version": "0.1.0",
+  "license": "PolyForm-Noncommercial-1.0.0",
   "type": "module",
   "description": "ClinicOS - clinic management system (portfolio project, fictional demo data only)",
   "workspaces": [
