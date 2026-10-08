@@ -48,6 +48,11 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="w-full max-w-sm rounded-lg border border-border bg-surface p-8 shadow-md">
         <div className="mb-6 text-center">
+          <span className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M10 4v12M4 10h12" />
+            </svg>
+          </span>
           <h1 className="text-xl font-semibold text-text">ClinicOS</h1>
           <p className="mt-1 text-sm text-muted">Sign in to your clinic account</p>
         </div>

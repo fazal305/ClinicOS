@@ -75,16 +75,17 @@ export default function AdminDashboardPage() {
       </div>
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-        <StatCard label="Today's Appointments" value={cards.todaysAppointments} />
-        <StatCard label="Total Patients" value={cards.totalPatients} />
-        <StatCard label="Active Doctors" value={cards.activeDoctors} />
-        <StatCard label="Completed Visits Today" value={cards.completedVisitsToday} />
+        <StatCard label="Today's Appointments" value={cards.todaysAppointments} icon="appointments" />
+        <StatCard label="Total Patients" value={cards.totalPatients} icon="patients" />
+        <StatCard label="Active Doctors" value={cards.activeDoctors} icon="doctors" />
+        <StatCard label="Completed Visits Today" value={cards.completedVisitsToday} icon="visits" />
         <StatCard
           label="Pending Payments"
           value={cards.pendingPaymentsCount}
           hint={formatCurrency(cards.pendingPaymentsAmount)}
+          icon="payments"
         />
-        <StatCard label="Total Revenue" value={formatCurrency(cards.totalRevenue)} />
+        <StatCard label="Total Revenue" value={formatCurrency(cards.totalRevenue)} icon="revenue" />
       </div>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
